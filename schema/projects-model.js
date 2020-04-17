@@ -1,12 +1,5 @@
 const db = require('../data/db-config.js');
 
-// Build an API with endpoints for:
-// adding resources.
-// retrieving a list of resources.
-// adding projects.
-// retrieving a list of projects.
-// adding tasks.
-// retrieving a list of tasks. The list of tasks should include the project name and project description.
 
 module.exports = {
     addResource,
@@ -31,15 +24,9 @@ function getById(id) {
     if (id) {
       return query
         .where({ id })
-        .join('Tasks', 'Tasks.project_id', 'Projects.id')
-        .insert({tasks: 'Tasks'})
-        // .join('Resources', 'Resources.project_id', 'Projects.id')
-        // .first()
         .then((project) => {
           if (project) {
-            console.log(project, ' is project!')
-            // query.insert({tasks: 'Tasks'})
-            return query
+            return project;
           } else {
             return null;
           }
@@ -47,11 +34,10 @@ function getById(id) {
     }
 }
 
-function getTasks(project_id) {
-    return db('tasks')
+function getTasks() {
+        return db('tasks')
         .select('Projects.name as Project', 'Projects.description as ProjectDescription', 'Tasks.description as Task')
-        .join('Projects', 'Task.project_id', 'Projects.id')
-        .where(project_id = 'Tasks.project_id')
+        .join('projects', 'Tasks.project_id', 'Projects.id')
 }
 
 function addProject(project) {
